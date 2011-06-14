@@ -26,12 +26,43 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
+// Dummy users database model
+function User(name, email) {
+  this.name = name;
+  this.email = email;
+}
+
+// Dummy users
+var users = [
+    new User('tj', 'tj@vision-media.ca')
+  , new User('ciaran', 'ciaranj@gmail.com')
+  , new User('aaron', 'aaron.heckmann+github@gmail.com')
+];
+
 // Routes
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Express'
+    title: 'Hey Jade!'
   });
+});
+
+app.get('/users', function(req, res){
+  res.render('users', {
+    title: 'Hey Jade! - Users',
+    users: users
+  });
+});
+
+app.get('/users/list', function(req, res){
+  res.partial('users/list', {
+    title: 'Hey Jade! - Users',
+    list: users
+  });
+});
+
+app.get('/user/:id', function(req, res){
+  res.partial('users/user', users[req.params.id]);
 });
 
 app.listen(3000);
